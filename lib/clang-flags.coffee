@@ -4,12 +4,10 @@ path = require 'path'
 {File, Directory} = require 'pathwatcher'
 
 module.exports =
-  GetClangFlags: getClangFlags
+  getClangFlags: (fileName) ->
+    getClangFlagsDotClangComplete(fileName)
   activate: (state) ->
 
-getClangFlags = (fileName) ->
-  getClangFlagsDotClangComplete(fileName)
-    
 getClangFlagsDotClangComplete = (fileName) ->
   # If someone already has a .clang_complete from vim configured, use that.
   searchDir = path.dirname fileName
