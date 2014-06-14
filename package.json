@@ -2,13 +2,17 @@
   "name": "clang-flags",
   "main": "./lib/clang-flags",
   "version": "0.0.0",
-  "description": "A short description of your package",
-  "activationEvents": ["clang-flags:toggle"],
-  "repository": "https://github.com/atom/clang-flags",
+  "description": "A library for determining the clang compilation flags needed for a source file",
+  "repository": "https://github.com/Kev/clang-flags.git",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
   },
   "dependencies": {
+    "pathwatcher": "^1.0"
+  },
+  "author": {
+    "name": "Kevin Smith"
   }
+
 }
