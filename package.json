@@ -1,17 +1,26 @@
 {
   "name": "clang-flags",
-  "main": "./lib/clang-flags",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "A library for determining the clang compilation flags needed for a source file",
-  "repository": "https://github.com/Kev/clang-flags.git",
-  "license": "MIT",
-  "engines": {
-    "atom": ">0.50.0"
+  "main": "lib/clang-flags.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kev/clang-flags.git"
+  },
+  "author": "Kevin Smith",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kev/clang-flags/issues"
+  },
+  "homepage": "https://github.com/Kev/clang-flags",
   "dependencies": {
     "pathwatcher": "^1.0"
   },
-  "author": {
-    "name": "Kevin Smith"
+  "devDependencies": {
+    "coffee-script": ">= 1.7.1",
+    "path": ">= 0.4.9"
   }
 }
