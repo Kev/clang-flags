@@ -21,6 +21,6 @@
     "path": ">= 0.4.9"
   },
   "devDependencies": {
-    "coffee-script": ">= 1.7.1",
+    "coffee-script": ">= 1.7.1"
   }
 }
