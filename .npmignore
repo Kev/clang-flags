@@ -1,5 +1,5 @@
 .gitignore
 .git
 src
-node_modules
 Makefile
+.npmignore
