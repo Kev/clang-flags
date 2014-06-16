@@ -5,8 +5,35 @@ path = require 'path'
 
 module.exports =
   getClangFlags: (fileName) ->
-    getClangFlagsDotClangComplete(fileName)
+    flags = getClangFlagsCompDB(fileName)
+    if flags
+      getClangFlagsDotClangComplete(fileName)
+    return flags
   activate: (state) ->
+
+getFileContents = (startFile, fileName) ->
+  searchDir = path.dirname startFile
+  args = []
+  while searchDir.length
+    searchFilePath = path.join searchDir, fileName
+    searchFile = new File(searchFilePath)
+    if searchFile.exists()
+      contents = ""
+      try
+        contents = readFileSync(searchFilePath, 'utf8')
+        return contents
+      catch error
+        console.log "clang-flags for " + fileName + " couldn't read file " + searchFilePath
+        console.log error
+      return nil
+    thisDir = new Directory(searchDir)
+    if thisDir.isRoot()
+      break
+    searchDir = thisDir.getParent().getPath()
+  return nil
+
+getClangFlagsCompDB = (fileName) ->
+  compDBContents = getFileContents(fileName, "compile_commands.json")
 
 getClangFlagsDotClangComplete = (fileName) ->
   # If someone already has a .clang_complete from vim configured, use that.
