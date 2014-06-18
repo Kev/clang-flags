@@ -37,6 +37,10 @@ getClangFlagsCompDB = (fileName) ->
   args = 0
   if compDBContents.length > 0
     compDB = JSON.parse(compDBContents)
+    for config in compDB
+      if fileName == path.join config['directory'], config['file']
+        #Find the file here
+        args = args.concat ["-working-directory=#{config['directory']}"]
   return args
 
 getClangFlagsDotClangComplete = (fileName) ->
@@ -44,5 +48,5 @@ getClangFlagsDotClangComplete = (fileName) ->
   args = []
   if clangCompleteContents.length > 0
     args = clangCompleteContents.split("\n")
-    args = args.concat ["-working-directory=#{searchDir}"] # All the includes will be relative to the .clang_complete
+    args = args.concat ["-working-directory=#{searchDir}", "-c #{fileName}"]
   return args
