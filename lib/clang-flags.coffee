@@ -25,12 +25,12 @@ getFileContents = (startFile, fileName) ->
       catch error
         console.log "clang-flags for " + fileName + " couldn't read file " + searchFilePath
         console.log error
-      return nil
+      return null
     thisDir = new Directory(searchDir)
     if thisDir.isRoot()
       break
     searchDir = thisDir.getParent().getPath()
-  return nil
+  return null
 
 getClangFlagsCompDB = (fileName) ->
   compDBContents = getFileContents(fileName, "compile_commands.json")

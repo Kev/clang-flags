@@ -2,7 +2,7 @@
   "name": "clang-flags",
   "version": "0.1.0",
   "description": "A library for determining the clang compilation flags needed for a source file",
-  "main": "lib/clang-flags.js",
+  "main": "lib/clang-flags.coffee",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,8 +17,7 @@
   },
   "homepage": "https://github.com/Kev/clang-flags",
   "dependencies": {
-    "pathwatcher": "^1.0",
-    "path": ">= 0.4.9"
+    "pathwatcher": "^2.5.0"
   },
   "devDependencies": {
     "coffee-script": ">= 1.7.1"
