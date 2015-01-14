@@ -6,8 +6,8 @@ path = require 'path'
 module.exports =
   getClangFlags: (fileName) ->
     flags = getClangFlagsCompDB(fileName)
-    if flags
-      getClangFlagsDotClangComplete(fileName)
+    if flags == 0
+      flags = getClangFlagsDotClangComplete(fileName)
     return flags
   activate: (state) ->
 
@@ -35,7 +35,7 @@ getFileContents = (startFile, fileName) ->
 getClangFlagsCompDB = (fileName) ->
   compDBContents = getFileContents(fileName, "compile_commands.json")
   args = 0
-  if compDBContents.length > 0
+  if compDBContents != null && compDBContents.length > 0
     compDB = JSON.parse(compDBContents)
     for config in compDB
       if fileName == path.join config['directory'], config['file']
@@ -46,7 +46,6 @@ getClangFlagsCompDB = (fileName) ->
 getClangFlagsDotClangComplete = (fileName) ->
   clangCompleteContents = getFileContents(fileName, ".clang_complete")
   args = []
-  if clangCompleteContents.length > 0
-    args = clangCompleteContents.split("\n")
-    args = args.concat ["-working-directory=#{searchDir}", "-c #{fileName}"]
+  if clangCompleteContents != null && clangCompleteContents.length > 0
+    args = clangCompleteContents.trim().split("\n")
   return args
