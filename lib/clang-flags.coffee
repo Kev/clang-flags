@@ -6,7 +6,7 @@ path = require 'path'
 module.exports =
   getClangFlags: (fileName) ->
     flags = getClangFlagsCompDB(fileName)
-    if flags == 0
+    if flags.length == 0
       flags = getClangFlagsDotClangComplete(fileName)
     return flags
   activate: (state) ->
@@ -18,23 +18,22 @@ getFileContents = (startFile, fileName) ->
     searchFilePath = path.join searchDir, fileName
     searchFile = new File(searchFilePath)
     if searchFile.exists()
-      contents = ""
       try
         contents = readFileSync(searchFilePath, 'utf8')
-        return contents
+        return [searchDir, contents]
       catch error
         console.log "clang-flags for " + fileName + " couldn't read file " + searchFilePath
         console.log error
-      return null
+      return [null, null]
     thisDir = new Directory(searchDir)
     if thisDir.isRoot()
       break
     searchDir = thisDir.getParent().getPath()
-  return null
+  return [null, null]
 
 getClangFlagsCompDB = (fileName) ->
-  compDBContents = getFileContents(fileName, "compile_commands.json")
-  args = 0
+  [searchDir, compDBContents] = getFileContents(fileName, "compile_commands.json")
+  args = []
   if compDBContents != null && compDBContents.length > 0
     compDB = JSON.parse(compDBContents)
     for config in compDB
@@ -44,8 +43,9 @@ getClangFlagsCompDB = (fileName) ->
   return args
 
 getClangFlagsDotClangComplete = (fileName) ->
-  clangCompleteContents = getFileContents(fileName, ".clang_complete")
+  [searchDir, clangCompleteContents] = getFileContents(fileName, ".clang_complete")
   args = []
   if clangCompleteContents != null && clangCompleteContents.length > 0
     args = clangCompleteContents.trim().split("\n")
+    args = args.concat ["-working-directory=#{searchDir}"]
   return args
