@@ -37,9 +37,15 @@ getClangFlagsCompDB = (fileName) ->
   if compDBContents != null && compDBContents.length > 0
     compDB = JSON.parse(compDBContents)
     for config in compDB
-      if fileName == path.join config['directory'], config['file']
-        #Find the file here
-        args = args.concat ["-working-directory=#{config['directory']}"]
+      if fileName == config['file']
+        includes = config.command.match(/-I\S*/g);
+        if includes
+            args = args.concat includes
+        system_includes = config.command.match(/-isystem\s*\S*/gi);
+        if system_includes
+            args = args.concat system_includes
+        args = args.concat ["-working-directory=#{searchDir}"]
+        break
   return args
 
 getClangFlagsDotClangComplete = (fileName) ->
