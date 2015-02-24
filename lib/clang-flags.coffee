@@ -1,7 +1,8 @@
 # ClangFlagsView = require './clang-flags-view'
-path = require 'path'
-{readFileSync} = require 'fs'
-{File, Directory} = require 'pathwatcher'
+path = null
+readFileSync = null
+File = null
+Directory = null
 
 module.exports =
   getClangFlags: (fileName) ->
@@ -10,6 +11,10 @@ module.exports =
       flags = getClangFlagsDotClangComplete(fileName)
     return flags
   activate: (state) ->
+    if path == null
+      path = require 'path'
+      {readFileSync} = require 'fs'
+      {File, Directory} = require 'pathwatcher'
 
 getFileContents = (startFile, fileName) ->
   searchDir = path.dirname startFile
