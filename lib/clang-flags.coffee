@@ -37,7 +37,9 @@ getClangFlagsCompDB = (fileName) ->
   if compDBContents != null && compDBContents.length > 0
     compDB = JSON.parse(compDBContents)
     for config in compDB
-      if fileName == config['file']
+      # We might have full paths, or we might have relative paths. Try to guess the relative path by removing the search path from the file path
+      relativeName = fileName[searchDir.length+1..fileName.length]
+      if fileName == config['file'] || relativeName == config['file']
         includes = config.command.match(/-I\S*/g);
         if includes
             args = args.concat includes
