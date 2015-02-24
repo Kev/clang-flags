@@ -40,12 +40,22 @@ getClangFlagsCompDB = (fileName) ->
       # We might have full paths, or we might have relative paths. Try to guess the relative path by removing the search path from the file path
       relativeName = fileName[searchDir.length+1..fileName.length]
       if fileName == config['file'] || relativeName == config['file']
-        includes = config.command.match(/-I\S*/g);
-        if includes
-            args = args.concat includes
-        system_includes = config.command.match(/-isystem\s*\S*/gi);
-        if system_includes
-            args = args.concat system_includes
+        allArgs = config.command.replace(/\s+/g, " ").split(' ')
+        singleArgs = []
+        doubleArgs = []
+        for i in [0..allArgs.length - 1]
+          nextArg = allArgs[i+1]
+          # work out which are standalone arguments, and which take a parameter
+          singleArgs.push allArgs[i] if allArgs[i][0] == '-' and (not nextArg || nextArg[0] == '-')
+          doubleArgs.push allArgs[i] + " " + nextArg if allArgs[i][0] == '-' and nextArg and (nextArg[0] != '-')
+        args = singleArgs
+        args.push it for it in doubleArgs when it[0..7] == '-isystem'
+        # includes = config.command.match(/-I\S*/g);
+        # if includes
+        #     args = args.concat includes
+        # system_includes = config.command.match(/-isystem\s*\S*/gi);
+        # if system_includes
+        #     args = args.concat system_includes
         args = args.concat ["-working-directory=#{searchDir}"]
         break
   return args
