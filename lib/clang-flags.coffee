@@ -17,7 +17,7 @@ getFileContents = (startFile, fileName) ->
   while searchDir.length
     searchFilePath = path.join searchDir, fileName
     searchFile = new File(searchFilePath)
-    if searchFile.exists()
+    if searchFile.existsSync()
       try
         contents = readFileSync(searchFilePath, 'utf8')
         return [searchDir, contents]
