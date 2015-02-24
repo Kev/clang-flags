@@ -50,12 +50,6 @@ getClangFlagsCompDB = (fileName) ->
           doubleArgs.push allArgs[i] + " " + nextArg if allArgs[i][0] == '-' and nextArg and (nextArg[0] != '-')
         args = singleArgs
         args.push it for it in doubleArgs when it[0..7] == '-isystem'
-        # includes = config.command.match(/-I\S*/g);
-        # if includes
-        #     args = args.concat includes
-        # system_includes = config.command.match(/-isystem\s*\S*/gi);
-        # if system_includes
-        #     args = args.concat system_includes
         args = args.concat ["-working-directory=#{searchDir}"]
         break
   return args
