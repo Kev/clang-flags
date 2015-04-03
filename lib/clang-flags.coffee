@@ -1,7 +1,6 @@
 # ClangFlagsView = require './clang-flags-view'
 path = require 'path'
-{readFileSync} = require 'fs'
-{File, Directory} = require 'pathwatcher'
+fs = require 'fs'
 
 module.exports =
   getClangFlags: (fileName) ->
@@ -13,22 +12,21 @@ module.exports =
 
 getFileContents = (startFile, fileName) ->
   searchDir = path.dirname startFile
-  args = []
-  while searchDir.length
+  while searchDir
     searchFilePath = path.join searchDir, fileName
-    searchFile = new File(searchFilePath)
-    if searchFile.existsSync()
-      try
-        contents = readFileSync(searchFilePath, 'utf8')
-        return [searchDir, contents]
-      catch error
-        console.log "clang-flags for " + fileName + " couldn't read file " + searchFilePath
-        console.log error
-      return [null, null]
-    thisDir = new Directory(searchDir)
-    if thisDir.isRoot()
-      break
-    searchDir = thisDir.getParent().getPath()
+    try
+      searchFileStats = fs.statSync searchFilePath
+      if searchFileStats.isFile()
+        try
+          contents = fs.readFileSync searchFilePath, 'utf8'
+          return [searchDir, contents]
+        catch error
+          console.log "clang-flags for " + fileName + " couldn't read file " + searchFilePath
+          console.log error
+        return [null, null]
+    parentDir = path.dirname searchDir
+    break if parentDir == searchDir
+    searchDir = parentDir
   return [null, null]
 
 getClangFlagsCompDB = (fileName) ->
