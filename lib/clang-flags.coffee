@@ -35,9 +35,10 @@ getClangFlagsCompDB = (fileName) ->
   if compDBContents != null && compDBContents.length > 0
     compDB = JSON.parse(compDBContents)
     for config in compDB
-      # We might have full paths, or we might have relative paths. Try to guess the relative path by removing the search path from the file path
-      relativeName = fileName[searchDir.length+1..fileName.length]
-      if fileName == config['file'] || relativeName == config['file']
+      # Specs: http://clang.llvm.org/docs/JSONCompilationDatabase.html
+      # Get an absolute path by prepending config['directory'] if necessary
+      configFilename = path.normalize(path.resolve(config['directory'], config['file']))
+      if fileName == configFilename
         allArgs = config.command.replace(/\s+/g, " ").split(' ')
         singleArgs = []
         doubleArgs = []
