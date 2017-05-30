@@ -46,9 +46,9 @@ getClangFlagsCompDB = (fileName) ->
           nextArg = allArgs[i+1]
           # work out which are standalone arguments, and which take a parameter
           singleArgs.push allArgs[i] if allArgs[i][0] == '-' and (not nextArg || nextArg[0] == '-')
-          doubleArgs.push allArgs[i] + " " + nextArg if allArgs[i][0] == '-' and nextArg and (nextArg[0] != '-')
+          doubleArgs.push [allArgs[i], nextArg] if allArgs[i][0] == '-' and nextArg and (nextArg[0] != '-')
         args = singleArgs
-        args.push it for it in doubleArgs when it[0..7] == '-isystem'
+        args = args.concat it for it in doubleArgs when it[0][0..7] == '-isystem'
         args = args.concat ["-working-directory=#{searchDir}"]
         break
   return args
